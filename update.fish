@@ -1,5 +1,5 @@
 function update --description 'Update your packages without the hassle of juggling fifteen different managers'
-    set -f _pmm_version 0.3.0
+    set -f _pmm_version 0.3.1
 
     function _pmm_print
         echo (set_color cyan)"$argv"(set_color normal)
@@ -8,12 +8,12 @@ function update --description 'Update your packages without the hassle of juggli
     function _pmm_list_packages
         if test (count $_pmm_pkgs) -eq 0
             _pmm_print 'No updates available.'
-            return 2
+            return 3
         end
 
         if not test (count $_pmm_pkgs) -eq (count $_pmm_oldv) \
                 -a (count $_pmm_pkgs) -eq (count $_pmm_newv)
-            return 3
+            return 4
         end
 
         # get the largest item in each to pad.
@@ -47,7 +47,6 @@ function update --description 'Update your packages without the hassle of juggli
         echo "update, version $_pmm_version"
         return 0
     end
-
 
     set -g _pmm_pkgs
     set -g _pmm_oldv
@@ -86,15 +85,15 @@ function update --description 'Update your packages without the hassle of juggli
     _pmm_list_packages
     or begin
         set -l _pmm_status $status
-        if test $_pmm_status -eq 2
+        if test $_pmm_status -eq 3
             return 0
-        else if test $_pmm_status -eq 3
+        else if test $_pmm_status -eq 4
             _pmm_print 'Error: mismatch in number of elements for packages list. Cannot display package list.'
         else
             return $_pmm_status
         end
     end
-        
+
     # does the user want to update?
     read -P (set_color cyan)'Would you like to update these packages? [Y/n]: '(set_color normal) -l confirm
     or begin # mainly for ctrl+c but this should catch most other things
