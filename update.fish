@@ -130,29 +130,4 @@ function update --description 'Update your packages without the hassle of juggli
                 # TODO: implement this manager
         end
     end
-
-    # # Usage:
-
-    # update — show help
-    # update all — update everything detected
-    # update <manager> [manager...] — update specific managers
-    # update <manager> [manager...] --dry-run — simulate
-
-    # # Flags:
-
-    # --dry-run / -n — simulate without installing
-    # --yes / -y — skip confirmation prompts
-    # --quiet / -q — minimal output
-    # --verbose — extra output
-    # --no-sudo — skip managers requiring sudo
-    # --log [file] — log output to a file
-    # --version / -v — show command version
-
-    # # Behavior:
-
-    # Auto-detect installed managers
-    # Colored status per manager (✓ done, ✗ failed, ~ skipped)
-    # Summary at the end
-    # Non-zero exit code if any manager failed
-
 end
