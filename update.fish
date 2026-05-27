@@ -1,5 +1,5 @@
 function update --description 'Update your packages without the hassle of juggling fifteen different managers'
-    set -f _pmm_version 0.4.0
+    set -f _pmm_version 1.0.0
     set -f _pmm_checked
     set -g _pmm_no_update 0
     set -g _pmm_pkgs
@@ -55,7 +55,7 @@ function update --description 'Update your packages without the hassle of juggli
         end
     end
 
-    argparse n/dry-run y/yes q/quiet v/verbose no-sudo 'log=' version -- $argv
+    argparse n/dry-run y/yes no-sudo version -- $argv
 
     if set -q _flag_version
         echo "update, version $_pmm_version"
@@ -122,14 +122,18 @@ function update --description 'Update your packages without the hassle of juggli
     test $_pmm_no_update != (count $argv)
     or return 0
     and begin
-        read -P (set_color cyan)'Would you like to update these packages? [Y/n]: '(set_color normal) -l confirm
+        set -q _flag_yes
+        and set -l _pmm_confirm ''
         or begin
-            _pmm_print 'Exiting.'
-            return 1
+            read -P (set_color cyan)'Would you like to update these packages? [Y/n]: '(set_color normal) -l _pmm_confirm
+            or begin
+                _pmm_print 'Exiting.'
+                return 1
+            end
         end
 
         # either y or n for updating. if unknown input given, exit
-        switch $confirm
+        switch $_pmm_confirm
             case Y y '' # default value is Y. if no input is given and enter is pressed read will return ''
                 _pmm_print 'Updating.'
                 set -q _flag_dry_run
